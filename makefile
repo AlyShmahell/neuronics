@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+CC := g++
 TF_CFLAGS := $(shell python3 -c 'import tensorflow as tf;print(" ".join(tf.sysconfig.get_compile_flags()))')
 TF_LFLAGS := $(shell python3 -c 'import tensorflow as tf;print(" ".join(tf.sysconfig.get_link_flags()))')
 build:
