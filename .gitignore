@@ -3,3 +3,8 @@ __pycache__/
 env/
 *.pyc
 *.so
+**/__pycache__/
+**/.vscode/
+**/env/
+**/*.pyc
+**/*.so

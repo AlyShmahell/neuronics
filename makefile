@@ -8,4 +8,7 @@ test:
 	python3 tests.py
 test_setup:
 	python3 -m virtualenv env
-	source env/bin/activate && which python && pip3 install .
+	mkdir -p env/tmp
+	source env/bin/activate && pip3 install .
+clean:
+	rm -rf env shannon/shannon.so shannon/__pycache__

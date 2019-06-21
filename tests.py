@@ -1,7 +1,7 @@
-import unittest
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+import unittest
 import shannon
 
 class Data:
@@ -33,42 +33,43 @@ def py_joint_entropy(X, Y):
 def py_mutual_information(X, Y):
     return py_entropy(X) + py_entropy(Y) - py_entropy(X | Y)
 
-class TestShannon(unittest.TestCase):
+
+class ShowcaseShannon(unittest.TestCase):
 
     def test_entropy(self):
-        i1 = tf.placeholder(dtype=tf.string, shape=(None,))
+        i1 = tf.placeholder(dtype=tf.string, shape=(None, None))
         e = shannon.entropy(i1)
         with tf.Session() as sess:
-            tf_result = sess.run(e, feed_dict={i1: Data.get(set([0]))})
-        py_result = py_entropy(set([0]))
-        assert f"{tf_result[0]:.12}" == f"{py_result:.12}"
+            tf_result = sess.run(e, feed_dict={i1: [Data.get(set([0])), Data.get(set([1]))]}).round(decimals=7)
+        py_result = np.array([py_entropy(set([0])).round(decimals=7), py_entropy(set([1])).round(decimals=7)])
+        assert f"{tf_result}" == f"{py_result}"
 
     def test_conditional_entropy(self):
-        i1 = tf.placeholder(dtype=tf.int32, shape=(None,))
-        i2 = tf.placeholder(dtype=tf.int32, shape=(None,))
+        i1 = tf.placeholder(dtype=tf.int32, shape=(None,None))
+        i2 = tf.placeholder(dtype=tf.int32, shape=(None,None))
         ce = shannon.conditional_entropy(i1, i2)
         with tf.Session() as sess:
-            tf_result = sess.run(ce, feed_dict={i1: Data.get(set([0])), i2: Data.get(set([1]))})
-        py_result = py_conditional_entropy(set([0]), set([1]))
-        assert f"{tf_result[0]:.12}" == f"{py_result:.12}"
+            tf_result = sess.run(ce, feed_dict={i1: [Data.get(set([0])), Data.get(set([1]))], i2: [Data.get(set([1])), Data.get(set([0]))]}).round(decimals=7)
+        py_result = np.array([py_conditional_entropy(set([0]), set([1])).round(decimals=7), py_conditional_entropy(set([1]), set([0])).round(decimals=7)])
+        assert f"{tf_result}" == f"{py_result}"
 
     def test_joint_entropy(self):
-        i1 = tf.placeholder(dtype=tf.int64, shape=(None,))
-        i2 = tf.placeholder(dtype=tf.int64, shape=(None,))
+        i1 = tf.placeholder(dtype=tf.int64, shape=(None,None))
+        i2 = tf.placeholder(dtype=tf.int64, shape=(None,None))
         ce = shannon.joint_entropy(i1, i2)
         with tf.Session() as sess:
-            tf_result = sess.run(ce, feed_dict={i1: Data.get(set([0])), i2: Data.get(set([1]))})
-        py_result = py_joint_entropy(set([0]), set([1]))
-        assert f"{tf_result[0]:.12}" == f"{py_result:.12}"
+            tf_result = sess.run(ce, feed_dict={i1: [Data.get(set([0])), Data.get(set([1]))], i2: [Data.get(set([1])), Data.get(set([0]))]}).round(decimals=7)
+        py_result = np.array([py_joint_entropy(set([0]), set([1])).round(decimals=7), py_joint_entropy(set([1]), set([0])).round(decimals=7)])
+        assert f"{tf_result}" == f"{py_result}"
 
     def test_mutual_information(self):
-        i1 = tf.placeholder(dtype=tf.float32, shape=(None,))
-        i2 = tf.placeholder(dtype=tf.float32, shape=(None,))
+        i1 = tf.placeholder(dtype=tf.float32, shape=(None,None))
+        i2 = tf.placeholder(dtype=tf.float32, shape=(None,None))
         ce = shannon.mutual_information(i1, i2)
         with tf.Session() as sess:
-            tf_result = sess.run(ce, feed_dict={i1: Data.get(set([0])), i2: Data.get(set([1]))})
-        py_result = py_mutual_information(set([0]), set([1]))
-        assert f"{tf_result[0]:.12}" == f"{py_result:.12}"
+            tf_result = sess.run(ce, feed_dict={i1: [Data.get(set([0])), Data.get(set([1]))], i2: [Data.get(set([1])), Data.get(set([0]))]}).round(decimals=7)
+        py_result = np.array([py_mutual_information(set([0]), set([1])).round(decimals=7), py_mutual_information(set([1]), set([0])).round(decimals=7)])
+        assert f"{tf_result}" == f"{py_result}"
 
 if __name__ == '__main__':
     unittest.main()
