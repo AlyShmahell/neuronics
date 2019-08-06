@@ -1,5 +1,5 @@
 import os
-from distutils.core import setup, Extension
+from setuptools import setup, find_packages
 
 def pretty(x):
     import re
@@ -18,8 +18,9 @@ except:
 
 setup(
     name="neuronics",
-    packages=["neuronics"],
+    packages=find_packages(),
     install_requires=['tensorflow==1.12.0'],
+    include_package_data=True,
     version='0.1.0',
     description='a collection of tensorflow functions.',
     author='Aly Shmahell',
