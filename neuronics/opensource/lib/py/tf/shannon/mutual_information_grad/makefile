@@ -18,7 +18,7 @@ GPUSRC    = mutual_information_grad.cu.cc
 PROD      = mutual_information_grad.so
 GPUPROD   = mutual_information_grad.cu.so
 
-default: gpu
+default: cpu
 
 cpu:
 	$(CXX) $(CFLAGS) $(SRC) $(LFLAGS) -o $(PROD)

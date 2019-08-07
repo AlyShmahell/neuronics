@@ -49,36 +49,36 @@ class MutualInformationGradOp : public OpKernel {
         DCHECK_EQ(input0_dim1size, input1_dim1size);
         Tensor *grad_x = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(0, {input0_dim0size}, &grad_x));
-        auto grad_x_tensor = grad_x->flat<double>();
+        auto grad_x_tensor = grad_x->flat<float>();
         Tensor *grad_y = NULL;
-        OP_REQUIRES_OK(context, context->allocate_output(0, {input0_dim0size}, &grad_y));
-        auto grad_y_tensor = grad_y->flat<double>();
+        OP_REQUIRES_OK(context, context->allocate_output(0, {input1_dim0size}, &grad_y));
+        auto grad_y_tensor = grad_y->flat<float>();
         for (int sample_index = 0; sample_index < input0_dim0size; sample_index++)
         {
-            std::map<string, long double> x_y_frequencies;
-            typename std::map<string, long double>::iterator x_y_frequency_iterator;
-            std::map<dtype, long double> y_frequencies;
-            typename std::map<dtype, long double>::iterator y_frequency_iterator;
-            std::map<dtype, long double> x_frequencies;
-            typename std::map<dtype, long double>::iterator x_frequency_iterator;
+            std::map<string, float> x_y_frequencies;
+            typename std::map<string, float>::iterator x_y_frequency_iterator;
+            std::map<dtype, float> y_frequencies;
+            typename std::map<dtype, float>::iterator y_frequency_iterator;
+            std::map<dtype, float> x_frequencies;
+            typename std::map<dtype, float>::iterator x_frequency_iterator;
             for (int i = input0_dim1size * sample_index; i < input0_dim1size * (sample_index + 1); i++)
             {
-                long double x_y_frequency = (long double)(1) / (long double)(input1_dim1size);
+                float x_y_frequency = (float)(1) / (float)(input1_dim1size);
                 x_y_frequency_iterator = x_y_frequencies.find(join(input0_tensor(i), input1_tensor(i)));
                 if (x_y_frequency_iterator == x_y_frequencies.end())
-                    x_y_frequencies.insert(std::pair<string, long double>(join(input0_tensor(i), input1_tensor(i)), x_y_frequency));
+                    x_y_frequencies.insert(std::pair<string, float>(join(input0_tensor(i), input1_tensor(i)), x_y_frequency));
                 else
                     x_y_frequencies[join(input0_tensor(i), input1_tensor(i))] += x_y_frequency;
-                long double y_frequency = (long double)(1) / (long double)(input1_dim1size);
+                float y_frequency = (float)(1) / (float)(input1_dim1size);
                 y_frequency_iterator = y_frequencies.find(input1_tensor(i));
                 if (y_frequency_iterator == y_frequencies.end())
-                    y_frequencies.insert(std::pair<dtype, long double>(input1_tensor(i), y_frequency));
+                    y_frequencies.insert(std::pair<dtype, float>(input1_tensor(i), y_frequency));
                 else
                     y_frequencies[input1_tensor(i)] += y_frequency;
-                long double x_frequency = (long double)(1) / (long double)(input1_dim1size);
+                float x_frequency = (float)(1) / (float)(input1_dim1size);
                 x_frequency_iterator = x_frequencies.find(input0_tensor(i));
                 if (x_frequency_iterator == x_frequencies.end())
-                    x_frequencies.insert(std::pair<dtype, long double>(input0_tensor(i), x_frequency));
+                    x_frequencies.insert(std::pair<dtype, float>(input0_tensor(i), x_frequency));
                 else
                     x_frequencies[input0_tensor(i)] += x_frequency;
             }
