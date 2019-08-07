@@ -8,15 +8,7 @@ REGISTER_OP("MutualInformationGrad")
     .Input("x: dtype")
     .Input("y: dtype")
     .Output("grad_x: float32")
-    .Output("grad_y: float32")
-    .SetShapeFn([](shape_inference::InferenceContext *c) {
-        c->set_output(0, c->input(0));
-        return Status::OK();
-    })
-    .Doc(R"doc(
-Calculates the conditional entropy of a Tensor.
-output: A Tensor with one element representing the conditional entropy of the input elements.
-)doc");
+    .Output("grad_y: float32");
 
 using CPUDevice = Eigen::ThreadPoolDevice;
 using GPUDevice = Eigen::GpuDevice;
