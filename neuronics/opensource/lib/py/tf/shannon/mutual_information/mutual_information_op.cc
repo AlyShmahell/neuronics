@@ -6,7 +6,7 @@ REGISTER_OP("MutualInformation")
     .Attr("dtype: {float, double, int32, int64, string} = DT_INT64")
     .Input("x: dtype")
     .Input("y: dtype")
-    .Output("output: double")
+    .Output("output: float32")
     .SetShapeFn([](shape_inference::InferenceContext *c) {
         c->set_output(0, c->input(0));
         return Status::OK();
@@ -53,7 +53,7 @@ class MutualInformationOp : public OpKernel {
         DCHECK_EQ(input0_dim1size, input1_dim1size);
         Tensor *output = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(0, {input0_dim0size}, &output));
-        auto output_tensor = output->flat<double>();
+        auto output_tensor = output->flat<float>();
         for (int sample_index = 0; sample_index < input0_dim0size; sample_index++)
         {
             std::map<string, long double> x_y_frequencies;
@@ -83,7 +83,7 @@ class MutualInformationOp : public OpKernel {
                 else
                     x_frequencies[input0_tensor(i)] += x_frequency;
             }
-            output_tensor(sample_index) = entropy(y_frequencies) + entropy(x_frequencies) - entropy(x_y_frequencies);
+            output_tensor(sample_index) = (float) entropy(y_frequencies) + (float) entropy(x_frequencies) - (float) entropy(x_y_frequencies);
         }
   }
 };

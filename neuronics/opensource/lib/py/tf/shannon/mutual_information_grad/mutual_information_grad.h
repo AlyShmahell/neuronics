@@ -11,7 +11,7 @@ template <typename Device, typename dtype>
 struct MutualInformationGradFunctor {
   void operator()(
     const Device& d,
-    const double grad,
+    const float grad,
     const dtype x,
     const dtype y
   );
@@ -22,7 +22,7 @@ template <typename dtype>
 struct MutualInformationGradFunctor<Eigen::GpuDevice, dtype> {
   void operator()(
     const Eigen::GpuDevice& d,
-    const double grad,
+    const float grad,
     const dtype x,
     const dtype y
   );
