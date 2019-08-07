@@ -26,3 +26,14 @@ long double entropy(std::map<T, long double> frequencies)
     }
     return result;
 }
+
+template <typename T>
+long double dxentropy(std::map<T, long double> frequencies)
+{
+    long double result = 0.0;
+    for (auto frequency : frequencies)
+    {
+        result += -((log(frequency.second) + 1)/log(2));
+    }
+    return result;
+}

@@ -24,3 +24,10 @@ mutual_information_op = tf.load_op_library(
     os.path.join(tf.resource_loader.get_data_files_path(),
                  'mutual_information/mutual_information_op.so'))
 mutual_information = mutual_information_op.mutual_information
+
+mutual_information_grad = tf.load_op_library(
+    os.path.join(tf.resource_loader.get_data_files_path(),
+                 'mutual_information_grad/mutual_information_grad.so'))
+@ops.RegisterGradient("MutualInformation")
+def _inner_product_grad_cc(op, grad):
+    return mutual_information_grad.mutual_information_grad(grad, op.inputs[0], op.inputs[1])
