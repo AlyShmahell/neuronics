@@ -1,7 +1,7 @@
 #ifdef GOOGLE_CUDA
 #define EIGEN_USE_GPU
 
-#include "conditional_entropy_op.h"
+#include "mutual_information_op.h"
 #include "tensorflow/core/util/gpu_kernel_helper.h"
 
 using namespace tensorflow;
@@ -26,7 +26,7 @@ void MutualInformationFunctor<GPUDevice, dtype>::operator()(
 template struct MutualInformationFunctor<GPUDevice, float>;
 template struct MutualInformationFunctor<GPUDevice, double>;
 template struct MutualInformationFunctor<GPUDevice, int32>;
-template struct MutualInformationFunctor<GPUDevice, int32>;
+template struct MutualInformationFunctor<GPUDevice, int64>;
 template struct MutualInformationFunctor<GPUDevice, string>;
 
 #endif // GOOGLE_CUDA
