@@ -3,12 +3,12 @@
 using namespace tensorflow;
 
 REGISTER_OP("MutualInformationGrad")
-    .Attr("dtype: {float, double, int32, int64, string} = DT_INT64")
-    .Input("grad: float32")
+    .Attr("dtype: {float, double, int32, int64, string} = DT_DOUBLE")
+    .Input("grad: float64")
     .Input("x: dtype")
     .Input("y: dtype")
-    .Output("grad_x: float32")
-    .Output("grad_y: float32");
+    .Output("grad_x: float64")
+    .Output("grad_y: float64");
 
 using CPUDevice = Eigen::ThreadPoolDevice;
 using GPUDevice = Eigen::GpuDevice;
@@ -17,7 +17,7 @@ template <typename dtype>
 struct MutualInformationGradFunctor<CPUDevice, dtype> {
   void operator()(
     const CPUDevice& d,
-    const float grad,
+    const double grad,
     const dtype x,
     const dtype y
   ) {}
@@ -49,36 +49,36 @@ class MutualInformationGradOp : public OpKernel {
         DCHECK_EQ(input0_dim1size, input1_dim1size);
         Tensor *grad_x = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(0, {input0_dim0size}, &grad_x));
-        auto grad_x_tensor = grad_x->flat<float>();
+        auto grad_x_tensor = grad_x->flat<double>();
         Tensor *grad_y = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(0, {input1_dim0size}, &grad_y));
-        auto grad_y_tensor = grad_y->flat<float>();
+        auto grad_y_tensor = grad_y->flat<double>();
         for (int sample_index = 0; sample_index < input0_dim0size; sample_index++)
         {
-            std::map<string, float> x_y_frequencies;
-            typename std::map<string, float>::iterator x_y_frequency_iterator;
-            std::map<dtype, float> y_frequencies;
-            typename std::map<dtype, float>::iterator y_frequency_iterator;
-            std::map<dtype, float> x_frequencies;
-            typename std::map<dtype, float>::iterator x_frequency_iterator;
+            std::map<string, double> x_y_frequencies;
+            typename std::map<string, double>::iterator x_y_frequency_iterator;
+            std::map<dtype, double> y_frequencies;
+            typename std::map<dtype, double>::iterator y_frequency_iterator;
+            std::map<dtype, double> x_frequencies;
+            typename std::map<dtype, double>::iterator x_frequency_iterator;
             for (int i = input0_dim1size * sample_index; i < input0_dim1size * (sample_index + 1); i++)
             {
-                float x_y_frequency = (float)(1) / (float)(input1_dim1size);
+                double x_y_frequency = (double)(1) / (double)(input1_dim1size);
                 x_y_frequency_iterator = x_y_frequencies.find(join(input0_tensor(i), input1_tensor(i)));
                 if (x_y_frequency_iterator == x_y_frequencies.end())
-                    x_y_frequencies.insert(std::pair<string, float>(join(input0_tensor(i), input1_tensor(i)), x_y_frequency));
+                    x_y_frequencies.insert(std::pair<string, double>(join(input0_tensor(i), input1_tensor(i)), x_y_frequency));
                 else
                     x_y_frequencies[join(input0_tensor(i), input1_tensor(i))] += x_y_frequency;
-                float y_frequency = (float)(1) / (float)(input1_dim1size);
+                double y_frequency = (double)(1) / (double)(input1_dim1size);
                 y_frequency_iterator = y_frequencies.find(input1_tensor(i));
                 if (y_frequency_iterator == y_frequencies.end())
-                    y_frequencies.insert(std::pair<dtype, float>(input1_tensor(i), y_frequency));
+                    y_frequencies.insert(std::pair<dtype, double>(input1_tensor(i), y_frequency));
                 else
                     y_frequencies[input1_tensor(i)] += y_frequency;
-                float x_frequency = (float)(1) / (float)(input1_dim1size);
+                double x_frequency = (double)(1) / (double)(input1_dim1size);
                 x_frequency_iterator = x_frequencies.find(input0_tensor(i));
                 if (x_frequency_iterator == x_frequencies.end())
-                    x_frequencies.insert(std::pair<dtype, float>(input0_tensor(i), x_frequency));
+                    x_frequencies.insert(std::pair<dtype, double>(input0_tensor(i), x_frequency));
                 else
                     x_frequencies[input0_tensor(i)] += x_frequency;
             }

@@ -28,9 +28,9 @@ long double entropy(std::map<T, long double> frequencies)
 }
 
 template <typename T>
-float dxentropy(std::map<T, float> frequencies)
+double dxentropy(std::map<T, double> frequencies)
 {
-    float result = 0.0;
+    double result = 0.0;
     for (auto frequency : frequencies)
     {
         result += -((log(frequency.second) + 1)/log(2));

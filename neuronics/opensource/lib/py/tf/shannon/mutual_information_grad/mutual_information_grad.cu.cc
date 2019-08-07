@@ -11,7 +11,7 @@ using GPUDevice = Eigen::GpuDevice;
 template <typename dtype>
 void MutualInformationGradFunctor<GPUDevice, dtype>::operator()(
     const GPUDevice& d,
-    const float grad,
+    const double grad,
     const dtype x,
     const dtype y
   ) {
