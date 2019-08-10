@@ -24,7 +24,7 @@ class conditionalEntropyTestCase(unittest.TestCase):
         centr = mutual_information_grad(i1, i2, i2)
         with tf.Session() as sess:
             tf_result = sess.run(centr, feed_dict={i1: [Data.get(set([0])), Data.get(set([1]))], i2: [Data.get(set([1])), Data.get(set([0]))]})
-        print(f"{tf_result}")
+        print(f"{type(tf_result)}, {list(tf_result)}")
 
 if __name__ == '__main__':
     unittest.main()
