@@ -48,10 +48,10 @@ class MutualInformationGradOp : public OpKernel {
         DCHECK_EQ(input0_dim0size, input1_dim0size);
         DCHECK_EQ(input0_dim1size, input1_dim1size);
         Tensor *grad_x = NULL;
-        OP_REQUIRES_OK(context, context->allocate_output(0, {input0_dim0size}, &grad_x));
+        OP_REQUIRES_OK(context, context->allocate_output(0, input0_shape, &grad_x));
         auto grad_x_tensor = grad_x->flat<float>();
         Tensor *grad_y = NULL;
-        OP_REQUIRES_OK(context, context->allocate_output(1, {input1_dim0size}, &grad_y));
+        OP_REQUIRES_OK(context, context->allocate_output(1, input1_shape, &grad_y));
         auto grad_y_tensor = grad_y->flat<float>();
         for (int sample_index = 0; sample_index < input0_dim0size; sample_index++)
         {
