@@ -49,10 +49,10 @@ class MutualInformationGradOp : public OpKernel {
         DCHECK_EQ(input0_dim1size, input1_dim1size);
         Tensor *grad_x = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(0, input0_shape, &grad_x));
-        auto grad_x_tensor = grad_x->flat<float>().setZero();
+        auto grad_x_tensor = grad_x->flat<float>();
         Tensor *grad_y = NULL;
         OP_REQUIRES_OK(context, context->allocate_output(1, input1_shape, &grad_y));
-        auto grad_y_tensor = grad_y->flat<float>().setZero();
+        auto grad_y_tensor = grad_y->flat<float>();
         for (int sample_index = 0; sample_index < input0_dim0size; sample_index++)
         {
             std::map<dtype, float> y_frequencies;
@@ -74,8 +74,11 @@ class MutualInformationGradOp : public OpKernel {
                 else
                     x_frequencies[input0_tensor(i)] += x_frequency;
             }
-            grad_x_tensor(sample_index) = dxentropy(x_frequencies);
-            grad_y_tensor(sample_index) = dxentropy(y_frequencies);
+            for (int i = input0_dim1size * sample_index; i < input0_dim1size * (sample_index + 1); i++)
+            {
+                grad_x_tensor(i) = dxentropy(x_frequencies);
+                grad_y_tensor(i) = dxentropy(y_frequencies);
+            }
         }
         const TensorShape &output1_shape = grad_x->shape();
         DCHECK_EQ(output1_shape.dims(), 2);
