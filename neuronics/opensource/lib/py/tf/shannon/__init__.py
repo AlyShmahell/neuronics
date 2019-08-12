@@ -32,4 +32,4 @@ mutual_information_grad = tf.load_op_library(
 mutual_information_grad = mutual_information_grad.mutual_information_grad 
 @ops.RegisterGradient("MutualInformation")
 def _inner_product_grad_cc(op, grad):
-    return grad, grad
+    return [grad, grad]
