@@ -11,7 +11,7 @@ except:
     import sys
     print(pretty(
         f"""
-            You need to install tensorflow in order to build this package from scratch
+            You need to install tensorflow>=1.12.2 in order to build this package from scratch
             """
     ))
     sys.exit(0)
@@ -19,7 +19,7 @@ except:
 setup(
     name="neuronics",
     packages=find_packages(),
-    install_requires=['tensorflow'],
+    install_requires=['tensorflow==1.12.2'],
     include_package_data=True,
     version='0.1.0',
     description='a collection of tensorflow functions.',
