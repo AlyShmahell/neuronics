@@ -19,7 +19,7 @@ except:
 setup(
     name="neuronics",
     packages=find_packages(),
-    install_requires=['tensorflow==1.15.2'],
+    install_requires=['tensorflow==2.9.3'],
     include_package_data=True,
     version='0.1.0',
     description='a collection of tensorflow functions.',
